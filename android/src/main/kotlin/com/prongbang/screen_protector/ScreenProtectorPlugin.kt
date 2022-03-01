@@ -44,7 +44,7 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     result.success(false)
                 }
             }
-            else -> result.notImplemented()
+            else -> result.success(false)
         }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
