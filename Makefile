@@ -1,2 +1,2 @@
 publish:
-	pub publish
+	dart pub publish
