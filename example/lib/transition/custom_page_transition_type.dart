@@ -1,0 +1,4 @@
+enum CustomPageTransitionType {
+  rightToLeft,
+  bottomToTop,
+}
