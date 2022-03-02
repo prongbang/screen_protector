@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:screen_protector/lifecycle/lifecycle_state.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:screen_protector_example/main_page.dart';
-import 'package:screen_protector_example/prevent_screenshot_page.dart';
+import 'package:screen_protector_example/router/routers.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -46,9 +46,7 @@ class _MyAppState extends LifecycleState<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const MainPage(),
-      routes: <String, WidgetBuilder>{
-        '/prevent-screenshot': (_) => const PreventScreenshotPage(),
-      },
+      onGenerateRoute: AppRouters.routes(),
     );
   }
 }
