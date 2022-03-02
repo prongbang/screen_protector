@@ -14,21 +14,33 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends LifecycleState<MyApp> {
   @override
   void initState() {
-    ScreenProtector.protectDataLeakageWithColor(Colors.white);
+    // For iOS only.
+    _protectDataLeakageWithColor();
     super.initState();
   }
 
   @override
   void onResumed() {
-    protectDataLeakageOff();
+    // For Android only.
+    _protectDataLeakageAndPreventScreenshotOff();
     super.onResumed();
   }
 
   @override
   void onPaused() {
-    protectDataLeakageOn();
+    // For Android only.
+    _protectDataLeakagePreventScreenshotOn();
     super.onPaused();
   }
+
+  void _protectDataLeakageWithColor() async =>
+      await ScreenProtector.protectDataLeakageWithColor(Colors.white);
+
+  void _protectDataLeakageAndPreventScreenshotOff() async =>
+      await ScreenProtector.protectDataLeakageOff();
+
+  void _protectDataLeakagePreventScreenshotOn() async =>
+      await ScreenProtector.protectDataLeakageOn();
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +50,5 @@ class _MyAppState extends LifecycleState<MyApp> {
         '/prevent-screenshot': (_) => const PreventScreenshotPage(),
       },
     );
-  }
-
-  void protectDataLeakageOn() async {
-    await ScreenProtector.protectDataLeakageOn();
-  }
-
-  void protectDataLeakageOff() async {
-    await ScreenProtector.protectDataLeakageOff();
   }
 }

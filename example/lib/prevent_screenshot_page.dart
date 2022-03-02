@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:screen_protector/lifecycle/lifecycle_state.dart';
 import 'package:screen_protector/screen_protector.dart';
 
 class PreventScreenshotPage extends StatefulWidget {
@@ -9,17 +8,18 @@ class PreventScreenshotPage extends StatefulWidget {
   _PreventScreenshotPageState createState() => _PreventScreenshotPageState();
 }
 
-class _PreventScreenshotPageState
-    extends LifecycleState<PreventScreenshotPage> {
+class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
   @override
   void initState() {
-    preventScreenshotOn();
+    // For iOS only.
+    _preventScreenshotOn();
     super.initState();
   }
 
   @override
   void dispose() {
-    preventScreenshotOff();
+    // For iOS only.
+    _preventScreenshotOff();
     super.dispose();
   }
 
@@ -36,11 +36,9 @@ class _PreventScreenshotPageState
     );
   }
 
-  void preventScreenshotOn() async {
-    await ScreenProtector.preventScreenshotOn();
-  }
+  void _preventScreenshotOn() async =>
+      await ScreenProtector.preventScreenshotOn();
 
-  void preventScreenshotOff() async {
-    await ScreenProtector.preventScreenshotOff();
-  }
+  void _preventScreenshotOff() async =>
+      await ScreenProtector.preventScreenshotOff();
 }
