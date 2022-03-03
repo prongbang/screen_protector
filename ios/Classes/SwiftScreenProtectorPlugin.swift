@@ -4,6 +4,8 @@ import ScreenProtectorKit
 
 public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     
+    private static var channel: FlutterMethodChannel? = nil
+    
     private var enabledPreventScreenshot: EnabledStatus = .idle
     private var enabledProtectDataLeakageWithBlur: EnabledStatus = .idle
     private var enabledProtectDataLeakageWithImage: EnabledStatus = .idle
@@ -18,14 +20,14 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "screen_protector", binaryMessenger: registrar.messenger())
+        SwiftScreenProtectorPlugin.channel = FlutterMethodChannel(name: "screen_protector", binaryMessenger: registrar.messenger())
         
         let window = UIApplication.shared.delegate?.window
         let screenProtectorKit = ScreenProtectorKit(window: window as? UIWindow)
         screenProtectorKit.configurePreventionScreenshot()
         
         let instance = SwiftScreenProtectorPlugin(screenProtectorKit: screenProtectorKit)
-        registrar.addMethodCallDelegate(instance, channel: channel)
+        registrar.addMethodCallDelegate(instance, channel: SwiftScreenProtectorPlugin.channel!)
         registrar.addApplicationDelegate(instance)
     }
     
@@ -91,10 +93,33 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
             screenProtectorKit?.disablePreventScreenshot()
             result(true)
             break
+        case "addListener":
+            screenProtectorKit?.removeScreenshotObserver()
+            screenProtectorKit?.screenshotObserver {
+                SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenshot", arguments: nil)
+            }
+            
+            if #available(iOS 11.0, *) {
+                screenProtectorKit?.removeScreenRecordObserver()
+                screenProtectorKit?.screenRecordObserver { isCaptured in
+                    SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenRecord", arguments: isCaptured)
+                }
+            }
+            
+            result("listened")
+            break
+        case "removeListener":
+            screenProtectorKit?.removeAllObserver()
+            
+            result("removed")
+            break
         default:
             result(false)
             break
         }
     }
     
+    deinit {
+        screenProtectorKit?.removeAllObserver()
+    }
 }

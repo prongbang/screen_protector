@@ -12,6 +12,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
   @override
   void initState() {
     // For iOS only.
+    _addListenerPreventScreenshot();
     _preventScreenshotOn();
     super.initState();
   }
@@ -19,6 +20,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
   @override
   void dispose() {
     // For iOS only.
+    _removeListenerPreventScreenshot();
     _preventScreenshotOff();
     super.dispose();
   }
@@ -41,4 +43,18 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
 
   void _preventScreenshotOff() async =>
       await ScreenProtector.preventScreenshotOff();
+
+  void _addListenerPreventScreenshot() async {
+    ScreenProtector.addListener(() {
+      // Screenshot
+      print('Screenshot:');
+    }, (isCaptured) {
+      // Screen Record
+      print('Screen Record:');
+    });
+  }
+
+  void _removeListenerPreventScreenshot() async {
+    ScreenProtector.removeListener();
+  }
 }
