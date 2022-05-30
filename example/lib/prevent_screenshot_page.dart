@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:screen_protector/lifecycle/lifecycle_state.dart';
 import 'package:screen_protector/screen_protector.dart';
 
 class PreventScreenshotPage extends StatefulWidget {
@@ -8,7 +9,8 @@ class PreventScreenshotPage extends StatefulWidget {
   _PreventScreenshotPageState createState() => _PreventScreenshotPageState();
 }
 
-class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
+class _PreventScreenshotPageState
+    extends LifecycleState<PreventScreenshotPage> {
   @override
   void initState() {
     // For iOS only.
@@ -23,6 +25,18 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
     _removeListenerPreventScreenshot();
     _preventScreenshotOff();
     super.dispose();
+  }
+
+  @override
+  void onPaused() {
+    _protectScreenOn();
+    super.onPaused();
+  }
+
+  @override
+  void onResumed() {
+    _protectScreenOff();
+    super.onResumed();
   }
 
   @override
@@ -43,6 +57,11 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
 
   void _preventScreenshotOff() async =>
       await ScreenProtector.preventScreenshotOff();
+
+  void _protectScreenOn() async => await ScreenProtector.protectDataLeakageOn();
+
+  void _protectScreenOff() async =>
+      await ScreenProtector.protectDataLeakageOff();
 
   void _addListenerPreventScreenshot() async {
     ScreenProtector.addListener(() {
