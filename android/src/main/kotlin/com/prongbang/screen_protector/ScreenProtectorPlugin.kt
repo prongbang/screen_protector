@@ -1,9 +1,8 @@
 package com.prongbang.screen_protector
 
 import android.app.Activity
-import android.view.WindowManager
 import androidx.annotation.NonNull
-
+import com.prongbang.screenprotect.AndroidScreenProtector
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -15,6 +14,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 /** ScreenProtectorPlugin */
 class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var activity: Activity? = null
+    private var screenProtectorUtility: ScreenProtectorUtility? = null
 
     private lateinit var channel: MethodChannel
 
@@ -25,24 +25,21 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) =
         when (call.method) {
-            "protectDataLeakageOn", "preventScreenshotOn" -> {
-                try {
-                    activity?.window?.setFlags(
-                        WindowManager.LayoutParams.FLAG_SECURE,
-                        WindowManager.LayoutParams.FLAG_SECURE
-                    )
-                    result.success(true)
-                } catch (_: Exception) {
-                    result.success(false)
-                }
+            "preventScreenshotOn" -> {
+                val data = screenProtectorUtility?.preventScreenshotOn() ?: false
+                result.success(data)
             }
-            "protectDataLeakageOff", "preventScreenshotOff" -> {
-                try {
-                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                    result.success(true)
-                } catch (_: Exception) {
-                    result.success(false)
-                }
+            "preventScreenshotOff" -> {
+                val data = screenProtectorUtility?.preventScreenshotOff() ?: false
+                result.success(data)
+            }
+            "protectDataLeakageOn" -> {
+                val data = screenProtectorUtility?.protectDataLeakageOn() ?: false
+                result.success(data)
+            }
+            "protectDataLeakageOff" -> {
+                val data = screenProtectorUtility?.preventScreenshotOff() ?: false
+                result.success(data)
             }
             else -> result.success(false)
         }
@@ -53,6 +50,8 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
+        val screenProtector = AndroidScreenProtector.newInstance(activity)
+        screenProtectorUtility = AndroidScreenProtectorUtility(screenProtector)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -60,6 +59,8 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         activity = binding.activity
+        val screenProtector = AndroidScreenProtector.newInstance(activity)
+        screenProtectorUtility = AndroidScreenProtectorUtility(screenProtector)
     }
 
     override fun onDetachedFromActivity() {

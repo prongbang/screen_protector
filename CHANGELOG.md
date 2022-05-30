@@ -1,3 +1,7 @@
+## 1.1.1
+
+* Added compatibility with Flutter 3.0
+
 ## 1.1.0
 
 * Add function observer screenshot and screen record for iOS.
