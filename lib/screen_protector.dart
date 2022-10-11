@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen_protector/extension/color_extension.dart';
 
@@ -11,7 +10,7 @@ class ScreenProtector {
   static void Function(bool)? _onScreenRecordListener;
 
   /// Add callback actions when screenshot or screen record events received,
-  /// Supported for iOS only, donothing when run on Android.
+  /// Supported for iOS only, do nothing when run on Android.
   static void addListener(
     void Function()? screenshotListener,
     void Function(bool)? screenRecordListener,
@@ -30,7 +29,7 @@ class ScreenProtector {
   }
 
   /// Remove observers
-  /// Supported for iOS only, donothing when run on Android.
+  /// Supported for iOS only, do nothing when run on Android.
   static void removeListener() async {
     _removeListener();
     await _channel.invokeMethod('removeListener');
@@ -51,41 +50,41 @@ class ScreenProtector {
     }
   }
 
-  /// Supported for Anddroid only, donothing when run on iOS.
+  /// Supported for Android only, do nothing when run on iOS.
   static Future<void> protectDataLeakageOn() async {
     return await _channel.invokeMethod('protectDataLeakageOn');
   }
 
-  /// Supported for Anddroid only, donothing when run on iOS.
+  /// Supported for Android only, do nothing when run on iOS.
   static Future<void> protectDataLeakageOff() async {
     return await _channel.invokeMethod('protectDataLeakageOff');
   }
 
-  /// Supported for iOS only, donothing when run on Android.
+  /// Supported for iOS only, do nothing when run on Android.
   static Future<void> protectDataLeakageWithBlur() async {
     return await _channel.invokeMethod('protectDataLeakageWithBlur');
   }
 
-  /// Supported for iOS only, donothing when run on Android.
+  /// Supported for iOS only, do nothing when run on Android.
   static Future<void> protectDataLeakageWithImage(String imageName) async {
     return await _channel.invokeMethod('protectDataLeakageWithImage', {
       'name': imageName,
     });
   }
 
-  /// Supported for iOS only, donothing when run on Android.
+  /// Supported for iOS only, do nothing when run on Android.
   static Future<void> protectDataLeakageWithColor(Color color) async {
     return await _channel.invokeMethod('protectDataLeakageWithColor', {
       'hexColor': color.toHex(),
     });
   }
 
-  /// Supported for Anddroid and iOS.
+  /// Supported for Android and iOS.
   static Future<void> preventScreenshotOn() async {
     return await _channel.invokeMethod('preventScreenshotOn');
   }
 
-  /// Supported for Anddroid and iOS.
+  /// Supported for Android and iOS.
   static Future<void> preventScreenshotOff() async {
     return await _channel.invokeMethod('preventScreenshotOff');
   }

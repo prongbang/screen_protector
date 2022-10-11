@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:screen_protector/lifecycle/lifecycle_state.dart';
 import 'package:screen_protector/screen_protector.dart';
 
 class PreventScreenshotPage extends StatefulWidget {
@@ -9,12 +8,13 @@ class PreventScreenshotPage extends StatefulWidget {
   _PreventScreenshotPageState createState() => _PreventScreenshotPageState();
 }
 
-class _PreventScreenshotPageState
-    extends LifecycleState<PreventScreenshotPage> {
+class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
   @override
   void initState() {
     // For iOS only.
     _addListenerPreventScreenshot();
+
+    // For iOS and Android
     _preventScreenshotOn();
     super.initState();
   }
@@ -23,20 +23,10 @@ class _PreventScreenshotPageState
   void dispose() {
     // For iOS only.
     _removeListenerPreventScreenshot();
+
+    // For iOS and Android
     _preventScreenshotOff();
     super.dispose();
-  }
-
-  @override
-  void onPaused() {
-    _protectScreenOn();
-    super.onPaused();
-  }
-
-  @override
-  void onResumed() {
-    _protectScreenOff();
-    super.onResumed();
   }
 
   @override
@@ -58,18 +48,19 @@ class _PreventScreenshotPageState
   void _preventScreenshotOff() async =>
       await ScreenProtector.preventScreenshotOff();
 
-  void _protectScreenOn() async => await ScreenProtector.protectDataLeakageOn();
-
-  void _protectScreenOff() async =>
-      await ScreenProtector.protectDataLeakageOff();
-
   void _addListenerPreventScreenshot() async {
     ScreenProtector.addListener(() {
       // Screenshot
-      print('Screenshot:');
+      debugPrint('Screenshot:');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Screenshot!'),
+      ));
     }, (isCaptured) {
       // Screen Record
-      print('Screen Record:');
+      debugPrint('Screen Record:');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Screen Record!'),
+      ));
     });
   }
 

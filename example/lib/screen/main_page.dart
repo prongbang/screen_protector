@@ -22,8 +22,14 @@ class MainPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/prevent-screenshot');
               },
-              child: const Text('Secure Screen'),
+              child: const Text('Prevent Screenshot'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/protect-data-leakage');
+              },
+              child: const Text('Protect Screen Data Leakage'),
+            )
           ],
         ),
       ),

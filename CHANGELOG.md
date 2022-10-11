@@ -1,3 +1,7 @@
+## 1.1.2
+
+* Fix bug some device white screen
+
 ## 1.1.1
 
 * Added compatibility with Flutter 3.0
