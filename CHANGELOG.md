@@ -1,3 +1,8 @@
+## 1.1.3
+
+* Update compileSdkVersion to 33
+* Update screen-protector version to 1.0.1
+
 ## 1.1.2
 
 * Fix bug some device white screen

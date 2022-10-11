@@ -3,7 +3,6 @@ package com.prongbang.screen_protector
 import android.view.WindowManager
 import android.app.Activity
 import androidx.annotation.NonNull
-import com.prongbang.screenprotect.AndroidScreenProtector
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -15,7 +14,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 /** ScreenProtectorPlugin */
 class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var activity: Activity? = null
-    private var screenProtectorUtility: ScreenProtectorUtility? = null
 
     private lateinit var channel: MethodChannel
 
@@ -58,8 +56,6 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
-        val screenProtector = AndroidScreenProtector.newInstance(activity)
-        screenProtectorUtility = AndroidScreenProtectorUtility(screenProtector)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -67,8 +63,6 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         activity = binding.activity
-        val screenProtector = AndroidScreenProtector.newInstance(activity)
-        screenProtectorUtility = AndroidScreenProtectorUtility(screenProtector)
     }
 
     override fun onDetachedFromActivity() {
