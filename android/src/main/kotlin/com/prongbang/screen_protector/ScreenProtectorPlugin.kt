@@ -1,5 +1,6 @@
 package com.prongbang.screen_protector
 
+import android.view.WindowManager
 import android.app.Activity
 import androidx.annotation.NonNull
 import com.prongbang.screenprotect.AndroidScreenProtector
@@ -25,26 +26,33 @@ class ScreenProtectorPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) =
         when (call.method) {
-            "preventScreenshotOn" -> {
-                val data = screenProtectorUtility?.preventScreenshotOn() ?: false
-                result.success(data)
+            "protectDataLeakageOn", "preventScreenshotOn" -> {
+                try {
+                    activity?.window?.setFlags(
+                        WindowManager.LayoutParams.FLAG_SECURE,
+                        WindowManager.LayoutParams.FLAG_SECURE,
+                    )
+                    result.success(true)
+                } catch (_: Exception) {
+                    result.success(false)
+                }
             }
-            "preventScreenshotOff" -> {
-                val data = screenProtectorUtility?.preventScreenshotOff() ?: false
-                result.success(data)
-            }
-            "protectDataLeakageOn" -> {
-                val data = screenProtectorUtility?.protectDataLeakageOn() ?: false
-                result.success(data)
-            }
-            "protectDataLeakageOff" -> {
-                val data = screenProtectorUtility?.preventScreenshotOff() ?: false
-                result.success(data)
+            "protectDataLeakageOff", "preventScreenshotOff" -> {
+                try {
+                    activity?.window?.clearFlags(
+                        WindowManager.LayoutParams.FLAG_SECURE,
+                    )
+                    result.success(true)
+                } catch (_: Exception) {
+                    result.success(false)
+                }
             }
             else -> result.success(false)
         }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(
+        @NonNull binding: FlutterPlugin.FlutterPluginBinding
+    ) {
         channel.setMethodCallHandler(null)
     }
 
