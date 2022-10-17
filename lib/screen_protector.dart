@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:screen_protector/extension/color_extension.dart';
+import 'package:flutter/material.dart';
 
 class ScreenProtector {
   static const MethodChannel _channel = MethodChannel('screen_protector');
