@@ -1,3 +1,7 @@
+## 1.1.3+1
+
+* Config maven jitpack
+
 ## 1.1.3
 
 * Update compileSdkVersion to 33
