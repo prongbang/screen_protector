@@ -1,3 +1,7 @@
+## 1.1.4
+
+* Fix bug Could not find com.github.prongbang:screen-protector:x.x.x 
+
 ## 1.1.3+1
 
 * Config maven jitpack
