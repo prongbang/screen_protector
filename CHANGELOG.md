@@ -1,3 +1,7 @@
+## 1.1.5
+
+* Fixes color class usage was missing flutter material import by juampiq6
+
 ## 1.1.4
 
 * Fix bug Could not find com.github.prongbang:screen-protector:x.x.x 
