@@ -40,6 +40,12 @@ await ScreenProtector.preventScreenshotOn();
 await ScreenProtector.preventScreenshotOff();
 ```
 
+#### Check Screen Recording
+
+```dart
+final isRecording = await ScreenProtector.isRecording();
+```
+
 ### Android
 
 #### Protect Data Leakage Background Screenshot and Prevent Screenshot 

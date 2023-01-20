@@ -113,6 +113,9 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
             
             result("removed")
             break
+        case "isRecording":
+            result(screenProtectorKit?.screenIsRecording() ?? false)
+            return
         default:
             result(false)
             break

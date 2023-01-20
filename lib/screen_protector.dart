@@ -89,4 +89,9 @@ class ScreenProtector {
   static Future<void> preventScreenshotOff() async {
     return await _channel.invokeMethod('preventScreenshotOff');
   }
+
+  /// Supported for iOS only, do nothing when run on Android.
+  static Future<bool> isRecording() async {
+    return await _channel.invokeMethod('isRecording');
+  }
 }

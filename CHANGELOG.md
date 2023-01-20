@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Add function check screen recording for iOS only
+
 ## 1.1.5
 
 * Fixes color class usage was missing flutter material import by juampiq6

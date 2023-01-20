@@ -5,7 +5,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'screen_protector'
-  s.version          = '1.1.0'
+  s.version          = '1.2.0'
   s.summary          = 'Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.'
   s.description      = <<-DESC
 Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
@@ -16,7 +16,7 @@ Safe Data Leakage via Application Background Screenshot and Prevent Screenshot f
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency       'Flutter'
-  s.dependency       'ScreenProtectorKit', '~> 1.2.0'
+  s.dependency       'ScreenProtectorKit', '~> 1.3.0'
   s.platform         = :ios, '10.0'
   s.swift_version    = ["4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "5.3", "5.4", "5.5"]
 end
