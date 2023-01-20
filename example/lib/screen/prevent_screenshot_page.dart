@@ -16,6 +16,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
 
     // For iOS and Android
     _preventScreenshotOn();
+    _checkScreenRecording();
     super.initState();
   }
 
@@ -40,6 +41,16 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
         child: Text('Secure Screen'),
       ),
     );
+  }
+
+  void _checkScreenRecording() async {
+    final isRecording = await ScreenProtector.isRecording();
+
+    if (isRecording) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Screen Recording...'),
+      ));
+    }
   }
 
   void _preventScreenshotOn() async =>
