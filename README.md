@@ -2,6 +2,8 @@
 
 Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/prongbang)
+
 ## Feature
 
 ### iOS
