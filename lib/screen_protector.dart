@@ -67,6 +67,11 @@ class ScreenProtector {
   }
 
   /// Supported for iOS only, do nothing when run on Android.
+  static Future<void> protectDataLeakageWithBlurOff() async {
+    return await _channel.invokeMethod('protectDataLeakageWithBlurOff');
+  }
+
+  /// Supported for iOS only, do nothing when run on Android.
   static Future<void> protectDataLeakageWithImage(String imageName) async {
     return await _channel.invokeMethod('protectDataLeakageWithImage', {
       'name': imageName,

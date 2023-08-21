@@ -70,6 +70,9 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         case "protectDataLeakageWithBlur":
             enabledProtectDataLeakageWithBlur = .on
             break
+        case "protectDataLeakageWithBlurOff":
+            enabledProtectDataLeakageWithBlur = .off
+            break
         case "protectDataLeakageWithImage":
             if args != nil {
                 protectDataLeakageWithImageName = args!["name"] ?? "LaunchImage"

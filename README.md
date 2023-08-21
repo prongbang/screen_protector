@@ -22,10 +22,16 @@ await ScreenProtector.protectDataLeakageWithImage('LaunchImage');
 await ScreenProtector.protectDataLeakageWithColor(Colors.white);
 ```
 
-- Protect data leakage with blur
+- Protect data leakage with blur ON
 
 ```dart
 await ScreenProtector.protectDataLeakageWithBlur();
+```
+
+- Protect data leakage with blur OFF
+
+```dart
+await ScreenProtector.protectDataLeakageWithBlurOff();
 ```
 
 #### Prevent Screenshot

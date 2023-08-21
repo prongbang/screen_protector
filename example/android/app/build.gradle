@@ -26,7 +26,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 33
+    namespace 'com.prongbang.screen_protector_example'
+    compileSdk 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11

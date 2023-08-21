@@ -30,6 +30,7 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T>
       case AppLifecycleState.detached:
         onDetached();
         break;
+      default:
     }
   }
 

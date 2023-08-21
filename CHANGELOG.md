@@ -1,3 +1,9 @@
+## 1.3.0
+
+* Add function protect data leakage with blur off for iOS only
+* Upgrade gradle version to 8.0
+* Upgrade kotlin version to 1.7.10
+
 ## 1.2.0
 
 * Add function check screen recording for iOS only
@@ -8,7 +14,7 @@
 
 ## 1.1.4
 
-* Fix bug Could not find com.github.prongbang:screen-protector:x.x.x 
+* Fix bug Could not find com.github.prongbang:screen-protector:x.x.x
 
 ## 1.1.3+1
 
@@ -33,4 +39,5 @@
 
 ## 1.0.0
 
-* Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
+* Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and
+  iOS.
