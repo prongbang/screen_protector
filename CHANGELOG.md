@@ -1,3 +1,8 @@
+## 1.3.1
+
+* Update LifecycleState by App Lifecycle Listener
+* Add LegacyLifecycleState
+
 ## 1.3.0
 
 * Add function protect data leakage with blur off for iOS only

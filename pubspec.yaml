@@ -1,6 +1,6 @@
 name: screen_protector
 description: Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
-version: 1.3.0
+version: 1.3.1
 homepage: https://github.com/prongbang/screen_protector
 
 environment:
@@ -14,7 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.2
+  flutter_lints: ^2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
