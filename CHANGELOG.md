@@ -1,3 +1,7 @@
+## 1.3.2
+
+* Update ScreenProtectorKit (1.3.1)
+
 ## 1.3.1
 
 * Update LifecycleState by App Lifecycle Listener
