@@ -1,3 +1,8 @@
+## 1.4.0
+
+* feat(ios): add method protectDataLeakageWithColorOff
+* fix(ios): missing result() calls for some methods
+
 ## 1.3.2
 
 * Update ScreenProtectorKit (1.3.1)
