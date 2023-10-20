@@ -1,6 +1,6 @@
 name: screen_protector
 description: Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
-version: 1.4.0
+version: 1.4.1
 homepage: https://github.com/prongbang/screen_protector
 
 environment:

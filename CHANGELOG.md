@@ -1,3 +1,7 @@
+## 1.4.1
+
+* fix(ios): missing disabling of protection screens when calling protectDataLeakage off methods in inactive app state
+
 ## 1.4.0
 
 * feat(ios): add method protectDataLeakageWithColorOff
