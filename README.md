@@ -88,7 +88,7 @@ or
 await ScreenProtector.preventScreenshotOff();
 ```
 
-#### Protect Data Leakage for Android 12+
+#### Protect Data Leakage for Android 12+ (Optional)
 
 [https://github.com/prongbang/screen-protector](https://github.com/prongbang/screen-protector)
 
