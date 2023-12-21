@@ -96,6 +96,15 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
             screenProtectorKit?.disableColorScreen()
             result(true)
             break
+        case "protectDataLeakageOff":
+            enabledProtectDataLeakageWithColor = .off
+            enabledProtectDataLeakageWithImage = .off
+            enabledProtectDataLeakageWithBlur = .off
+            screenProtectorKit?.disableColorScreen()
+            screenProtectorKit?.disableImageScreen()
+            screenProtectorKit?.disableBlurScreen()
+            result(true)
+            break
         case "preventScreenshotOn":
             enabledPreventScreenshot = .on
             screenProtectorKit?.enabledPreventScreenshot()

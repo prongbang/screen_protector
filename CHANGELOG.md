@@ -1,3 +1,7 @@
+## 1.4.2
+
+* Add function protectDataLeakageOff for iOS
+
 ## 1.4.1
 
 * fix(ios): missing disabling of protection screens when calling protectDataLeakage off methods in inactive app state

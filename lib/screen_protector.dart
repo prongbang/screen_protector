@@ -55,7 +55,7 @@ class ScreenProtector {
     return await _channel.invokeMethod('protectDataLeakageOn');
   }
 
-  /// Supported for Android only, do nothing when run on iOS.
+  /// Supported for Android and iOS.
   static Future<void> protectDataLeakageOff() async {
     return await _channel.invokeMethod('protectDataLeakageOff');
   }
