@@ -1,3 +1,7 @@
+## 1.4.2+1
+
+* Update example
+
 ## 1.4.2
 
 * Add function protectDataLeakageOff for iOS
