@@ -6,6 +6,12 @@ Safe Data Leakage via Application Background Screenshot and Prevent Screenshot f
 
 ## Feature
 
+### Import
+
+```dart
+import 'package:screen_protector/screen_protector.dart';
+```
+
 ### iOS
 
 #### Protect Data Leakage Background Screenshot
@@ -114,17 +120,23 @@ class MainActivity : FlutterFragmentActivity() {
 - Protect Data Leakage Background Screenshot and Prevent Screenshot.
 
 ```dart
+import 'package:screen_protector/screen_protector.dart';
+
 class _PreventScreenshotPageState extends State<MyApp> {
-  
+
+  void _preventScreenshotOn() async => await ScreenProtector.protectDataLeakageOn();
+
+  void _protectDataLeakageOff() async => await ScreenProtector.protectDataLeakageOff();
+
   @override
-  void initState() async {
-    await ScreenProtector.protectDataLeakageOn();
+  void initState() {
+    _preventScreenshotOn();
     super.initState();
   }
 
   @override
-  void dispose() async {
-    await ScreenProtector.protectDataLeakageOff();
+  void dispose() {
+    _protectDataLeakageOff();
     super.dispose();
   }
   
@@ -136,17 +148,23 @@ class _PreventScreenshotPageState extends State<MyApp> {
 - Prevent Screenshot
 
 ```dart
+import 'package:screen_protector/screen_protector.dart';
+
 class _PreventScreenshotPageState extends State<MyApp> {
-  
+
+  void _preventScreenshotOn() async => await ScreenProtector.preventScreenshotOn();
+
+  void _preventScreenshotOff() async => await ScreenProtector.preventScreenshotOff();
+
   @override
-  void initState() async {
-    await ScreenProtector.preventScreenshotOn();
+  void initState() {
+    _preventScreenshotOn();
     super.initState();
   }
 
   @override
-  void dispose() async {
-    await ScreenProtector.preventScreenshotOff();
+  void dispose() {
+    _preventScreenshotOff();
     super.dispose();
   }
   
@@ -156,11 +174,15 @@ class _PreventScreenshotPageState extends State<MyApp> {
 - Protect data leakage with color
 
 ```dart
+import 'package:screen_protector/screen_protector.dart';
+
 class _ProtectDataLeakagePageState extends State<MyApp> {
-  
+
+  void _protectDataLeakageWithColor() async => await ScreenProtector.protectDataLeakageWithColor(Colors.white);
+
   @override
-  void initState() async {
-    await ScreenProtector.protectDataLeakageWithColor(Colors.white);
+  void initState() {
+    _protectDataLeakageWithColor();
     super.initState();
   }
   
@@ -172,11 +194,15 @@ class _ProtectDataLeakagePageState extends State<MyApp> {
 ![image01.png](screenshot/image01.png)
 
 ```dart
+import 'package:screen_protector/screen_protector.dart';
+
 class _ProtectDataLeakagePageState extends State<MyApp> {
-  
+
+  void _protectDataLeakageWithImage() async => await ScreenProtector.protectDataLeakageWithImage('LaunchImage');
+
   @override
-  void initState() async {
-    await ScreenProtector.protectDataLeakageWithImage('LaunchImage');
+  void initState() {
+    _protectDataLeakageWithImage();
     super.initState();
   }
   
@@ -186,11 +212,15 @@ class _ProtectDataLeakagePageState extends State<MyApp> {
 - Protect data leakage with blur
 
 ```dart
+import 'package:screen_protector/screen_protector.dart';
+
 class _ProtectDataLeakagePageState extends State<MyApp> {
-  
+
+  void _protectDataLeakageWithBlur() async => await ScreenProtector.protectDataLeakageWithBlur();
+
   @override
-  void initState() async {
-    await ScreenProtector.protectDataLeakageWithBlur();
+  void initState() {
+    _protectDataLeakageWithBlur();
     super.initState();
   }
   
