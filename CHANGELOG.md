@@ -1,3 +1,7 @@
+## 1.5.0
+
+* Update Java 17
+  
 ## 1.4.2+1
 
 * Update example
