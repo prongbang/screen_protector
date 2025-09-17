@@ -2,7 +2,7 @@ group 'com.prongbang.screen_protector'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '2.2.20'
     repositories {
         google()
         mavenCentral()
@@ -27,15 +27,15 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.prongbang.screen_protector'
-    compileSdk 33
+    compileSdk 36
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -43,7 +43,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 28
+        targetSdkVersion 36
     }
 }
 
