@@ -1,6 +1,7 @@
-## 1.5.0
+## 1.4.3
 
-* Update Java 17
+* Update Kotlin version and SDK settings
+* Acknowledgements: Thanks to @Ikxyz and @pocketshop-app for their PRs 🙏
   
 ## 1.4.2+1
 
