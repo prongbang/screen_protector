@@ -1,1 +1,13 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    plugins {
+        id 'com.android.library' version "8.6.0"
+        id 'org.jetbrains.kotlin.android' version "2.1.0"
+    }
+}
+
 rootProject.name = 'screen_protector'
