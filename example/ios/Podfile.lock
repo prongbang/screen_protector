@@ -20,10 +20,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/screen_protector/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  screen_protector: 6f92086bd2f2f4b54f54913289b9d1310610140b
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  screen_protector: 3d90d44ac886b25335aebd93230b454aef45794a
   ScreenProtectorKit: 83a6281b02c7a5902ee6eac4f5045f674e902ae4
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.16.2
