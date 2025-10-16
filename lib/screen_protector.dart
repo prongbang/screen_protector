@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:screen_protector/extension/color_extension.dart';
 
@@ -75,6 +75,11 @@ class ScreenProtector {
     return await _channel.invokeMethod('protectDataLeakageWithImage', {
       'name': imageName,
     });
+  }
+
+  /// Supported for iOS only, do nothing when run on Android.
+  static Future<void> protectDataLeakageWithImageOff() async {
+    return await _channel.invokeMethod('protectDataLeakageWithImageOff');
   }
 
   /// Supported for iOS only, do nothing when run on Android.

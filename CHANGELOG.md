@@ -1,3 +1,8 @@
+## 1.4.4
+
+* Fix iOS plugin not work with flutter Apps that have SceneDelegate and AppDelegate
+* Acknowledgements: Thanks to @MohamedElgamal93 for their report and fix issue 🙏
+
 ## 1.4.3
 
 * Update Kotlin version and SDK settings
