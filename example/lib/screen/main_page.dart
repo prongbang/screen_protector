@@ -11,25 +11,20 @@ class MainPage extends StatelessWidget {
         title: const Text('Screen Protector'),
       ),
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
-            const Expanded(
-              child: Center(
-                child: Text('Screen Protector'),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
+            ListTile(
+              title: const Text('Prevent Screenshot'),
+              onTap: () {
                 Navigator.pushNamed(context, '/prevent-screenshot');
               },
-              child: const Text('Prevent Screenshot'),
             ),
-            ElevatedButton(
-              onPressed: () {
+            ListTile(
+              title: const Text('Protect Screen Data Leakage'),
+              onTap: () {
                 Navigator.pushNamed(context, '/protect-data-leakage');
               },
-              child: const Text('Protect Screen Data Leakage'),
-            )
+            ),
           ],
         ),
       ),

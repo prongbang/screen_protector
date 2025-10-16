@@ -11,6 +11,8 @@ class ProtectDataLeakagePage extends StatefulWidget {
 }
 
 class _ProtectDataLeakagePageState extends State<ProtectDataLeakagePage> {
+  String _protectionMode = 'color';
+
   @override
   void initState() {
     _protectDataLeakageOn();
@@ -25,7 +27,19 @@ class _ProtectDataLeakagePageState extends State<ProtectDataLeakagePage> {
 
   void _protectDataLeakageOn() async {
     if (Platform.isIOS) {
-      await ScreenProtector.protectDataLeakageWithColor(Colors.white);
+      await ScreenProtector.protectDataLeakageOff();
+      print("protectionMode: $_protectionMode");
+      switch (_protectionMode) {
+        case 'color':
+          await ScreenProtector.protectDataLeakageWithColor(Colors.yellow);
+          break;
+        case 'image':
+          await ScreenProtector.protectDataLeakageWithImage('LaunchImage');
+          break;
+        case 'blur':
+          await ScreenProtector.protectDataLeakageWithBlur();
+          break;
+      }
     } else if (Platform.isAndroid) {
       await ScreenProtector.protectDataLeakageOn();
     }
@@ -38,8 +52,36 @@ class _ProtectDataLeakagePageState extends State<ProtectDataLeakagePage> {
         centerTitle: true,
         title: const Text('Protect Screen Data Leakage'),
       ),
-      body: const Center(
-        child: Text('Protect Screen Data Leakage'),
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Protect Screen Data Leakage with Color'),
+            onTap: () {
+              setState(() {
+                _protectionMode = 'color';
+              });
+              _protectDataLeakageOn();
+            },
+          ),
+          ListTile(
+            title: const Text('Protect Screen Data Leakage with Image'),
+            onTap: () {
+              setState(() {
+                _protectionMode = 'image';
+              });
+              _protectDataLeakageOn();
+            },
+          ),
+          ListTile(
+            title: const Text('Protect Screen Data Leakage with Blur'),
+            onTap: () {
+              setState(() {
+                _protectionMode = 'blur';
+              });
+              _protectDataLeakageOn();
+            },
+          ),
+        ],
       ),
     );
   }
