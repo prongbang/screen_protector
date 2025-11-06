@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - screen_protector (1.3.0):
+  - screen_protector (1.3.2):
     - Flutter
-    - ScreenProtectorKit (~> 1.4.0)
-  - ScreenProtectorKit (1.4.0)
+    - ScreenProtectorKit (~> 1.4.1)
+  - ScreenProtectorKit (1.4.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  screen_protector: 64f8db7697627e3e002086ce38adf7028bc6240d
-  ScreenProtectorKit: 9deb03228dbb69cc0e379ab01ca908ce91876752
+  screen_protector: fb01c3478cdfdffab23cd2586350346897935cad
+  ScreenProtectorKit: 21bdf6572671f779864908978d63e2c9ecfe7910
 
 PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
 

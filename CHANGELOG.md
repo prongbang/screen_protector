@@ -1,3 +1,7 @@
+## 1.4.5
+
+- Fix iOS prevent creation before any window is visible
+
 ## 1.4.4
 
 * Fix iOS plugin not work with flutter Apps that have SceneDelegate and AppDelegate
