@@ -1,3 +1,7 @@
+## 1.4.6
+
+- Added safe UIWindow resolver with AppDelegate and SceneDelegate fallback support.
+
 ## 1.4.5
 
 - Fix iOS prevent creation before any window is visible

@@ -4,17 +4,20 @@ import ScreenProtectorKit
 
 public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     private static var channel: FlutterMethodChannel? = nil
-    private var screenProtectorKitManager: ScreenProtectorKitManager? = nil
     
-    init(_ screenProtectorKitManager: ScreenProtectorKitManager) {
-        self.screenProtectorKitManager = screenProtectorKitManager
-    }
+    private lazy var screenProtectorKitManager: ScreenProtectorKitManager? = {
+        let windowManager = WindowManager()
+        guard let window = windowManager.getWindow() else {
+            print("[Error] UIWindow is not found.")
+            return nil
+        }
+        let screenProtectorKit = ScreenProtectorKit(window: window)
+        return ScreenProtectorKitManager(screenProtectorKit: screenProtectorKit)
+    }()
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         SwiftScreenProtectorPlugin.channel = FlutterMethodChannel(name: "screen_protector", binaryMessenger: registrar.messenger())
-        
-        let screenProtectorKitManager = ScreenProtectorKitManager()
-        let instance = SwiftScreenProtectorPlugin(screenProtectorKitManager)
+        let instance = SwiftScreenProtectorPlugin()
         registrar.addMethodCallDelegate(instance, channel: SwiftScreenProtectorPlugin.channel!)
         registrar.addApplicationDelegate(instance)
     }
