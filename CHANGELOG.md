@@ -1,3 +1,7 @@
+## 1.4.7
+
+- Ensured all ScreenProtectorKit initialization runs on the main thread
+
 ## 1.4.6
 
 - Added safe UIWindow resolver with AppDelegate and SceneDelegate fallback support.
