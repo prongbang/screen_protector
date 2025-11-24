@@ -14,7 +14,10 @@ Safe Data Leakage via Application Background Screenshot and Prevent Screenshot f
   s.license          = { :file => '../LICENSE' }
   s.author           = 'prongbang'
   s.source           = { :path => '.' }
-  s.source_files     = 'Classes/**/*'
+  s.source_files = [
+    'screen_protector/Sources/Legacy/**/*',
+    'screen_protector/Sources/screen_protector/**/*'
+  ]
   s.dependency       'Flutter'
   s.dependency       'ScreenProtectorKit', '1.4.2'
   s.platform         = :ios, '11.0'
