@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import ScreenProtectorKit
 
-#if USE_SPM_EXTERNAL_FRAMEWORK
+#if USE_SPM
 public class ScreenProtectorPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         SwiftScreenProtectorPlugin.register(with: registrar)

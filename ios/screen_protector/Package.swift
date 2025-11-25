@@ -24,7 +24,7 @@ let package = Package(
                 .process("PrivacyInfo.xcprivacy"),
             ],
             swiftSettings: [
-                .define("USE_SPM_EXTERNAL_FRAMEWORK")
+                .define("USE_SPM")
             ]
         )
     ]
