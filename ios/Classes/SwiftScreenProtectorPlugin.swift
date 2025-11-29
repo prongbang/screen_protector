@@ -6,6 +6,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     private static var channel: FlutterMethodChannel? = nil
     private var screenProtectorKitManager: ScreenProtectorKitManager?
     private weak var trackedWindow: UIWindow?
+    private var trackedStateSnapshot: StateSnapshot?
     private var sceneObservers: [NSObjectProtocol] = []
     
     override public init() {
@@ -29,12 +30,19 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         
         guard screenProtectorKitManager == nil else { return }
         guard let window = currentWindow else {
+            // Disable data leakage protection when no active UIWindow is available
+            self.screenProtectorKitManager?.applicationWillResignActive(.dataLeakage)
             print("[screen_protector] Active UIWindow is not available.")
             return
         }
         
         let kit = ScreenProtectorKit(window: window)
         self.screenProtectorKitManager = ScreenProtectorKitManager(screenProtectorKit: kit)
+        
+        // Restore previously tracked protection state (if any) when recreating the manager
+        if let stateSnapshot = self.trackedStateSnapshot {
+            self.screenProtectorKitManager?.setStateSnapshot(stateSnapshot)
+        }
         self.trackedWindow = window
     }
     
@@ -54,15 +62,17 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         // Protect Data Leakage - ON && Prevent Screenshot - OFF
         DispatchQueue.main.async {
             self.initializeManagerIfNeeded()
-            self.screenProtectorKitManager?.applicationWillResignActive(application)
+            self.screenProtectorKitManager?.applicationWillResignActive(.dataLeakage)
+            self.screenProtectorKitManager?.applicationWillResignActive(.screenshot)
         }
     }
     
     public func applicationDidBecomeActive(_ application: UIApplication) {
         // Protect Data Leakage - OFF && Prevent Screenshot - ON
         DispatchQueue.main.async {
+            self.screenProtectorKitManager?.applicationDidBecomeActive(.dataLeakage)
             self.initializeManagerIfNeeded(forceRecreate: true)
-            self.screenProtectorKitManager?.applicationDidBecomeActive(application)
+            self.screenProtectorKitManager?.applicationDidBecomeActive(.screenshot)
         }
     }
     
@@ -156,6 +166,8 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     }
     
     private func tearDownManager() {
+        // Preserve current protection state, remove listeners, and release manager/window references
+        trackedStateSnapshot = screenProtectorKitManager?.getStateSnapshot()
         screenProtectorKitManager?.removeListeners()
         screenProtectorKitManager = nil
         trackedWindow = nil
@@ -178,3 +190,4 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         tearDownManager()
     }
 }
+
