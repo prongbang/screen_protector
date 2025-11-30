@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "screen-protector", targets: ["screen_protector"])
     ],
     dependencies: [
-        .package(url: "https://github.com/prongbang/ScreenProtectorKit.git", .upToNextMajor(from: "1.4.2"))
+        .package(url: "https://github.com/prongbang/ScreenProtectorKit.git", .upToNextMajor(from: "1.4.4"))
     ],
     targets: [
         .target(
