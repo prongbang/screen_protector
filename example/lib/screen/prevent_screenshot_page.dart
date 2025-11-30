@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:screen_protector/screen_protector.dart';
 
 class PreventScreenshotPage extends StatefulWidget {
   const PreventScreenshotPage({Key? key}) : super(key: key);
 
   @override
-  _PreventScreenshotPageState createState() => _PreventScreenshotPageState();
+  State<PreventScreenshotPage> createState() => _PreventScreenshotPageState();
 }
 
 class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
   @override
   void initState() {
-    // For iOS only.
-    _addListenerPreventScreenshot();
-
-    // For iOS and Android
-    _preventScreenshotOn();
-    _checkScreenRecording();
+    _initialize();
     super.initState();
   }
 
@@ -30,6 +26,34 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
     super.dispose();
   }
 
+  void _initialize() async {
+    _addListenerPreventScreenshot();
+    _checkScreenRecording();
+    _preventScreenshotOn();
+    _setLandscapeRight();
+  }
+
+  Future<void> _setPortraitUp() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  Future<void> _setLandscapeRight() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+    ]);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  Future<void> _setLandscapeLeft() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+    ]);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +61,24 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
         centerTitle: true,
         title: const Text('Prevent Screenshot'),
       ),
-      body: const Center(
-        child: Text('Secure Screen'),
+      body: Center(
+        child: Column(
+          children: [
+            const Text('Secure Screen'),
+            ElevatedButton(
+              onPressed: _setPortraitUp,
+              child: const Text('Portrait Up'),
+            ),
+            ElevatedButton(
+              onPressed: _setLandscapeRight,
+              child: const Text('Landscape Right'),
+            ),
+            ElevatedButton(
+              onPressed: _setLandscapeLeft,
+              child: const Text('Landscape Left'),
+            ),
+          ],
+        ),
       ),
     );
   }

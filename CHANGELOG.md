@@ -1,3 +1,9 @@
+## 1.4.8
+
+- Fix iOS crash on iOS 18 when returning from background by recreating the
+  ScreenProtectorKit whenever the active UIWindow changes or a UIScene reconnects.
+- Acknowledgements: Thanks to @Jens-source for their PRs 🙏
+
 ## 1.4.7
 
 - Ensured all ScreenProtectorKit initialization runs on the main thread
