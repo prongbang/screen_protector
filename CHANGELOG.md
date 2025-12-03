@@ -1,3 +1,7 @@
+## 1.4.9
+
+- Fix: iOS preview data leakage not disabled
+
 ## 1.4.8
 
 - Fix iOS crash on iOS 18 when returning from background by recreating the
@@ -25,7 +29,7 @@
 
 * Update Kotlin version and SDK settings
 * Acknowledgements: Thanks to @Ikxyz and @pocketshop-app for their PRs 🙏
-  
+
 ## 1.4.2+1
 
 * Update example
