@@ -5,7 +5,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'screen_protector'
-  s.version          = '1.4.8'
+  s.version          = '1.4.9'
   s.summary          = 'Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.'
   s.description      = <<-DESC
 Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
