@@ -64,6 +64,8 @@
             </array>
         </dict>
     </dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs photo library access to pick images.</string>
 
 </dict>
 </plist>
