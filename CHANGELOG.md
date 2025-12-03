@@ -1,3 +1,7 @@
+## 1.4.10
+
+- Migrated from deprecated AppDelegate lifecycle methods to modern iOS Scene Lifecycle using UIScene notifications
+
 ## 1.4.9
 
 - Fix: iOS preview data leakage not disabled

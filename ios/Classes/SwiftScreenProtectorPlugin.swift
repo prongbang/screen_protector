@@ -53,10 +53,23 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         SwiftScreenProtectorPlugin.channel = FlutterMethodChannel(name: "screen_protector", binaryMessenger: registrar.messenger())
         let instance = SwiftScreenProtectorPlugin()
         registrar.addMethodCallDelegate(instance, channel: SwiftScreenProtectorPlugin.channel!)
-        registrar.addApplicationDelegate(instance)
         
-        // Initialize manager safely on main thread
+        // Initialize manager safely on main thread and scene lifecycle
         DispatchQueue.main.async {
+            NotificationCenter.default.addObserver(
+                instance,
+                selector: #selector(instance.onSceneDidBecomeActive),
+                name: UIScene.didActivateNotification,
+                object: nil
+            )
+            
+            NotificationCenter.default.addObserver(
+                instance,
+                selector: #selector(instance.onSceneWillResignActive),
+                name: UIScene.willDeactivateNotification,
+                object: nil
+            )
+            
             instance.initializeManagerIfNeeded()
         }
     }
@@ -101,21 +114,21 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    public func applicationWillResignActive(_ application: UIApplication) {
-        // Protect Data Leakage - ON && Prevent Screenshot - OFF
-        DispatchQueue.main.async {
-            self.initializeManagerIfNeeded()
-            self.willResignActive(.dataLeakage)
-            self.willResignActive(.screenshot)
-        }
-    }
-    
-    public func applicationDidBecomeActive(_ application: UIApplication) {
+    @objc func onSceneDidBecomeActive(_ notification: Notification) {
         // Protect Data Leakage - OFF && Prevent Screenshot - ON
         DispatchQueue.main.async {
             self.initializeManagerIfNeeded(forceRecreate: true)
             self.didBecomeActive(.dataLeakage)
             self.didBecomeActive(.screenshot)
+        }
+    }
+    
+    @objc func onSceneWillResignActive(_ notification: Notification) {
+        // Protect Data Leakage - ON && Prevent Screenshot - OFF
+        DispatchQueue.main.async {
+            self.initializeManagerIfNeeded()
+            self.willResignActive(.dataLeakage)
+            self.willResignActive(.screenshot)
         }
     }
     
