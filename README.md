@@ -2,7 +2,10 @@
 
 Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/prongbang)
+## Important (Breaking Change)
+
+Starting from version 1.4.10+, AppDelegate lifecycle is no longer supported.
+Please migrate your iOS project to SceneDelegate.
 
 ## Feature
 
@@ -226,3 +229,10 @@ class _ProtectDataLeakagePageState extends State<MyApp> {
   
 }
 ```
+
+💖 Support the Project
+
+If you find this package helpful, please consider supporting it:
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/prongbang)
+
