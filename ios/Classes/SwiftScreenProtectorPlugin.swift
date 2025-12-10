@@ -231,7 +231,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
             self?.tearDownManager()
         }
         
-        let foregroundObserver = center.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+        let foregroundObserver = center.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] _ in
             self?.initializeManagerIfNeeded(forceRecreate: true)
         }
         

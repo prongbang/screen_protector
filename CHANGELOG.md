@@ -1,3 +1,8 @@
+## 1.4.11
+
+- Fix: Change UIScene.willEnterForegroundNotification to UIScene.didActivateNotification
+- Acknowledgements: Thanks to @saedAlHanash for their testing 🙏
+
 ## 1.4.10
 
 - Migrated from deprecated AppDelegate lifecycle methods to modern iOS Scene Lifecycle using UIScene notifications
