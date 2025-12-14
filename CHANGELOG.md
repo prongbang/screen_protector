@@ -1,3 +1,7 @@
+## 1.4.12
+
+- Fix: Avoid removing overlay views during background transition
+
 ## 1.4.11
 
 - Fix: Change UIScene.willEnterForegroundNotification to UIScene.didActivateNotification
