@@ -53,6 +53,12 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         SwiftScreenProtectorPlugin.channel = FlutterMethodChannel(name: "screen_protector", binaryMessenger: registrar.messenger())
         let instance = SwiftScreenProtectorPlugin()
         registrar.addMethodCallDelegate(instance, channel: SwiftScreenProtectorPlugin.channel!)
+
+        // Force all UIKit text-based views to use LTR layout direction.
+        UIView.appearance().semanticContentAttribute = .forceLeftToRight
+        UILabel.appearance().semanticContentAttribute = .forceLeftToRight
+        UITextField.appearance().semanticContentAttribute = .forceLeftToRight
+        UITextView.appearance().semanticContentAttribute = .forceLeftToRight
         
         // Initialize manager safely on main thread and scene lifecycle
         DispatchQueue.main.async {
@@ -273,4 +279,3 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         tearDownManager()
     }
 }
-
