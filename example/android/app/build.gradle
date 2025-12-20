@@ -60,3 +60,17 @@ android {
 flutter {
     source '../..'
 }
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == "androidx.activity" &&
+                (details.requested.name == "activity" || details.requested.name == "activity-ktx")) {
+            details.useVersion("1.9.3")
+            details.because("activity 1.11.0 requires AGP 8.9.1, project stays on 8.6.0")
+        }
+    }
+}
+
+dependencies {
+    implementation "androidx.activity:activity-ktx:1.9.3"
+}
