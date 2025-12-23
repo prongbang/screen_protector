@@ -23,7 +23,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage>
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     WidgetsBinding.instance.removeObserver(this);
 
     // For iOS only.
@@ -31,7 +31,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage>
 
     // For iOS and Android
     _preventScreenshotOff();
-    await ScreenProtector.protectDataLeakageOff();
+    ScreenProtector.protectDataLeakageOff();
     super.dispose();
   }
 

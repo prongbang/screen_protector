@@ -20,8 +20,8 @@ class _ProtectDataLeakagePageState extends State<ProtectDataLeakagePage> {
   }
 
   @override
-  void dispose() async {
-    await ScreenProtector.protectDataLeakageOff();
+  void dispose() {
+    ScreenProtector.protectDataLeakageOff();
     super.dispose();
   }
 
