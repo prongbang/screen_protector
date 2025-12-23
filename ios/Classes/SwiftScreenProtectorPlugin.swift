@@ -75,8 +75,6 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
                 name: UIScene.willDeactivateNotification,
                 object: nil
             )
-            
-            instance.initializeManagerIfNeeded()
         }
     }
     
@@ -263,15 +261,17 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     }
     
     private func log() {
-        debugPrint("[screen_protector] screenProtectorKit: \(screenProtectorKit)")
-        debugPrint("[screen_protector] trackedWindow: \(trackedWindow)")
-        debugPrint("[screen_protector] sceneObservers: \(sceneObservers)")
-        debugPrint("[screen_protector] preventScreenshotState: \(preventScreenshotState)")
-        debugPrint("[screen_protector] blurProtectionState: \(blurProtectionState)")
-        debugPrint("[screen_protector] imageProtectionState: \(imageProtectionState)")
-        debugPrint("[screen_protector] colorProtectionState: \(colorProtectionState)")
-        debugPrint("[screen_protector] imageProtectionName: \(imageProtectionName)")
-        debugPrint("[screen_protector] colorProtectionHex: \(colorProtectionHex)")
+        #if DEBUG
+        print("[screen_protector] screenProtectorKit: \(String(describing: screenProtectorKit))")
+        print("[screen_protector] trackedWindow: \(String(describing: trackedWindow))")
+        print("[screen_protector] sceneObservers: \(sceneObservers)")
+        print("[screen_protector] preventScreenshotState: \(preventScreenshotState)")
+        print("[screen_protector] blurProtectionState: \(blurProtectionState)")
+        print("[screen_protector] imageProtectionState: \(imageProtectionState)")
+        print("[screen_protector] colorProtectionState: \(colorProtectionState)")
+        print("[screen_protector] imageProtectionName: \(imageProtectionName)")
+        print("[screen_protector] colorProtectionHex: \(colorProtectionHex)")
+        #endif
     }
     
     deinit {
