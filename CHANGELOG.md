@@ -1,3 +1,7 @@
+## 1.4.13
+
+- Fix: Listeners stop working after screen recording toolbar interaction
+
 ## 1.4.12
 
 - Fix: Avoid removing overlay views during background transition
