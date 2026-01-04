@@ -13,6 +13,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     private var colorProtectionState: ProtectionState = .idle
     private var imageProtectionName: String = ""
     private var colorProtectionHex: String = ""
+    private var needAddListener: Bool = false
     
     override public init() {
         super.init()
@@ -45,6 +46,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         
         self.screenProtectorKit = ScreenProtectorKit(window: window)
         onMain { self.screenProtectorKit?.configurePreventionScreenshot() }
+        onMain { self.addListenerIfNeeded() }
         
         self.trackedWindow = window
     }
@@ -190,21 +192,11 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
                 result(true)
                 break
             case "addListener":
-                self.screenProtectorKit?.removeScreenshotObserver()
-                self.screenProtectorKit?.screenshotObserver {
-                    SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenshot", arguments: nil)
-                }
-                
-                if #available(iOS 11.0, *) {
-                    self.screenProtectorKit?.removeScreenRecordObserver()
-                    self.screenProtectorKit?.screenRecordObserver { isRecording in
-                        SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenRecord", arguments: isRecording)
-                    }
-                }
-                
+                self.addListener()
                 result("listened")
                 break
             case "removeListener":
+                self.needAddListener = false
                 self.screenProtectorKit?.removeAllObserver()
                 result("removed")
                 break
@@ -215,6 +207,27 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
                 result(false)
                 break
             }
+        }
+    }
+    
+    private func addListener() {
+        self.needAddListener = true
+        self.screenProtectorKit?.removeScreenshotObserver()
+        self.screenProtectorKit?.screenshotObserver {
+            SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenshot", arguments: nil)
+        }
+        
+        if #available(iOS 11.0, *) {
+            self.screenProtectorKit?.removeScreenRecordObserver()
+            self.screenProtectorKit?.screenRecordObserver { isRecording in
+                SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenRecord", arguments: isRecording)
+            }
+        }
+    }
+    
+    private func addListenerIfNeeded() {
+        if self.needAddListener {
+            self.addListener()
         }
     }
     
@@ -265,6 +278,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         print("[screen_protector] colorProtectionState: \(colorProtectionState)")
         print("[screen_protector] imageProtectionName: \(imageProtectionName)")
         print("[screen_protector] colorProtectionHex: \(colorProtectionHex)")
+        print("[screen_protector] needAddListener: \(needAddListener)")
         #endif
     }
     
