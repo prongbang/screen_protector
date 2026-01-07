@@ -2,6 +2,14 @@ import Flutter
 import UIKit
 import ScreenProtectorKit
 
+#if USE_SPM
+public class ScreenProtectorPlugin: NSObject, FlutterPlugin {
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        SwiftScreenProtectorPlugin.register(with: registrar)
+    }
+}
+#endif
+
 public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     private static var channel: FlutterMethodChannel? = nil
     private var screenProtectorKit: ScreenProtectorKit?
