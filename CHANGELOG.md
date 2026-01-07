@@ -1,3 +1,24 @@
+## 1.4.13
+
+- Fix: Listeners stop working after screen recording toolbar interaction
+
+## 1.4.12
+
+- Fix: Avoid removing overlay views during background transition
+
+## 1.4.11
+
+- Fix: Change UIScene.willEnterForegroundNotification to UIScene.didActivateNotification
+- Acknowledgements: Thanks to @saedAlHanash for their testing 🙏
+
+## 1.4.10
+
+- Migrated from deprecated AppDelegate lifecycle methods to modern iOS Scene Lifecycle using UIScene notifications
+
+## 1.4.9
+
+- Fix: iOS preview data leakage not disabled
+
 ## 1.4.8
 
 - Fix iOS crash on iOS 18 when returning from background by recreating the
@@ -25,7 +46,7 @@
 
 * Update Kotlin version and SDK settings
 * Acknowledgements: Thanks to @Ikxyz and @pocketshop-app for their PRs 🙏
-  
+
 ## 1.4.2+1
 
 * Update example

@@ -5,7 +5,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'screen_protector'
-  s.version          = '1.4.8'
+  s.version          = '1.4.12'
   s.summary          = 'Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.'
   s.description      = <<-DESC
 Safe Data Leakage via Application Background Screenshot and Prevent Screenshot for Android and iOS.
@@ -19,7 +19,7 @@ Safe Data Leakage via Application Background Screenshot and Prevent Screenshot f
     'screen_protector/Sources/screen_protector/**/*'
   ]
   s.dependency       'Flutter'
-  s.dependency       'ScreenProtectorKit', '1.4.4'
+  s.dependency       'ScreenProtectorKit', '1.4.5'
   s.platform         = :ios, '11.0'
   s.swift_version    = ["4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "5.3", "5.4", "5.5"]
   s.resource_bundles = {'screen_protector_privacy' => ['screen_protector/Sources/screen_protector/PrivacyInfo.xcprivacy']}

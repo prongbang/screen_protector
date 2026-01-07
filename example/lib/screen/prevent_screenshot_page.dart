@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:screen_protector/screen_protector.dart';
 
 class PreventScreenshotPage extends StatefulWidget {
@@ -9,21 +11,34 @@ class PreventScreenshotPage extends StatefulWidget {
   State<PreventScreenshotPage> createState() => _PreventScreenshotPageState();
 }
 
-class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
+class _PreventScreenshotPageState extends State<PreventScreenshotPage>
+    with WidgetsBindingObserver {
+  final ImagePicker _picker = ImagePicker();
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     _initialize();
     super.initState();
   }
 
   @override
-  void dispose() {
+  void dispose() async {
+    WidgetsBinding.instance.removeObserver(this);
+
     // For iOS only.
     _removeListenerPreventScreenshot();
 
     // For iOS and Android
     _preventScreenshotOff();
+    await ScreenProtector.protectDataLeakageOff();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint('Lifecycle: $state');
+    super.didChangeAppLifecycleState(state);
   }
 
   void _initialize() async {
@@ -31,6 +46,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
     _checkScreenRecording();
     _preventScreenshotOn();
     _setLandscapeRight();
+    await ScreenProtector.protectDataLeakageWithColor(Colors.lightBlueAccent);
   }
 
   Future<void> _setPortraitUp() async {
@@ -63,6 +79,7 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
       ),
       body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Text('Secure Screen'),
             ElevatedButton(
@@ -77,10 +94,21 @@ class _PreventScreenshotPageState extends State<PreventScreenshotPage> {
               onPressed: _setLandscapeLeft,
               child: const Text('Landscape Left'),
             ),
+            ElevatedButton(
+              onPressed: _pickAndCrop,
+              child: const Text('Pick + Crop (repro)'),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _pickAndCrop() async {
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
+
+    await ImageCropper().cropImage(sourcePath: picked.path);
   }
 
   void _checkScreenRecording() async {

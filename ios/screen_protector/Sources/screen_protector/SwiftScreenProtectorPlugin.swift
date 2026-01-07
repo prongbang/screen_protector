@@ -12,10 +12,16 @@ public class ScreenProtectorPlugin: NSObject, FlutterPlugin {
 
 public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     private static var channel: FlutterMethodChannel? = nil
-    private var screenProtectorKitManager: ScreenProtectorKitManager?
+    private var screenProtectorKit: ScreenProtectorKit?
     private weak var trackedWindow: UIWindow?
-    private var trackedStateSnapshot: StateSnapshot?
     private var sceneObservers: [NSObjectProtocol] = []
+    private var preventScreenshotState: ProtectionState = .idle
+    private var blurProtectionState: ProtectionState = .idle
+    private var imageProtectionState: ProtectionState = .idle
+    private var colorProtectionState: ProtectionState = .idle
+    private var imageProtectionName: String = ""
+    private var colorProtectionHex: String = ""
+    private var needAddListener: Bool = false
     
     override public init() {
         super.init()
@@ -33,24 +39,23 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         let currentWindow = Self.activeWindow()
         
         if forceRecreate || (trackedWindow != nil && currentWindow !== trackedWindow) {
+            self.didBecomeActive(.dataLeakage)
             tearDownManager()
         }
         
-        guard screenProtectorKitManager == nil else { return }
+        guard screenProtectorKit == nil else { return }
         guard let window = currentWindow else {
+            self.log()
             // Disable data leakage protection when no active UIWindow is available
-            self.screenProtectorKitManager?.applicationWillResignActive(.dataLeakage)
+            self.didBecomeActive(.dataLeakage)
             print("[screen_protector] Active UIWindow is not available.")
             return
         }
         
-        let kit = ScreenProtectorKit(window: window)
-        self.screenProtectorKitManager = ScreenProtectorKitManager(screenProtectorKit: kit)
+        self.screenProtectorKit = ScreenProtectorKit(window: window)
+        onMain { self.screenProtectorKit?.configurePreventionScreenshot() }
+        onMain { self.addListenerIfNeeded() }
         
-        // Restore previously tracked protection state (if any) when recreating the manager
-        if let stateSnapshot = self.trackedStateSnapshot {
-            self.screenProtectorKitManager?.setStateSnapshot(stateSnapshot)
-        }
         self.trackedWindow = window
     }
     
@@ -58,29 +63,80 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         SwiftScreenProtectorPlugin.channel = FlutterMethodChannel(name: "screen_protector", binaryMessenger: registrar.messenger())
         let instance = SwiftScreenProtectorPlugin()
         registrar.addMethodCallDelegate(instance, channel: SwiftScreenProtectorPlugin.channel!)
-        registrar.addApplicationDelegate(instance)
         
-        // Initialize manager safely on main thread
+        // Initialize manager safely on main thread and scene lifecycle
         DispatchQueue.main.async {
-            instance.initializeManagerIfNeeded()
+            NotificationCenter.default.addObserver(
+                instance,
+                selector: #selector(instance.onSceneDidBecomeActive),
+                name: UIScene.didActivateNotification,
+                object: nil
+            )
+            
+            NotificationCenter.default.addObserver(
+                instance,
+                selector: #selector(instance.onSceneWillResignActive),
+                name: UIScene.willDeactivateNotification,
+                object: nil
+            )
         }
     }
     
-    public func applicationWillResignActive(_ application: UIApplication) {
+    public func willResignActive(_ type: ProtectionType) {
+        if type == .dataLeakage {
+            // Protect Data Leakage - ON
+            if colorProtectionState == .on {
+                onMain { self.screenProtectorKit?.enabledColorScreen(hexColor: self.colorProtectionHex) }
+            } else if imageProtectionState == .on {
+                onMain { self.screenProtectorKit?.enabledImageScreen(named: self.imageProtectionName) }
+            } else if blurProtectionState == .on {
+                onMain { self.screenProtectorKit?.enabledBlurScreen() }
+            }
+        }
+        
+        if type == .screenshot {
+            // Prevent Screenshot - OFF
+            if preventScreenshotState == .off {
+                onMain { self.screenProtectorKit?.disablePreventScreenshot() }
+            }
+        }
+    }
+    
+    public func didBecomeActive(_ type: ProtectionType) {
+        if type == .dataLeakage {
+            // Protect Data Leakage - OFF
+            if colorProtectionState == .on {
+                onMain { self.screenProtectorKit?.disableColorScreen() }
+            } else if imageProtectionState == .on {
+                onMain { self.screenProtectorKit?.disableImageScreen() }
+            } else if blurProtectionState == .on {
+                onMain { self.screenProtectorKit?.disableBlurScreen() }
+            }
+        }
+        
+        if type == .screenshot {
+            // Prevent Screenshot - ON
+            if preventScreenshotState == .on {
+                onMain { self.screenProtectorKit?.enabledPreventScreenshot() }
+            }
+        }
+    }
+    
+    @objc func onSceneDidBecomeActive(_ notification: Notification) {
+        // Protect Data Leakage - OFF && Prevent Screenshot - ON
+        DispatchQueue.main.async {
+            self.initializeManagerIfNeeded(forceRecreate: true)
+            self.didBecomeActive(.dataLeakage)
+            self.didBecomeActive(.screenshot)
+        }
+    }
+    
+    @objc func onSceneWillResignActive(_ notification: Notification) {
         // Protect Data Leakage - ON && Prevent Screenshot - OFF
         DispatchQueue.main.async {
             self.initializeManagerIfNeeded()
-            self.screenProtectorKitManager?.applicationWillResignActive(.dataLeakage)
-            self.screenProtectorKitManager?.applicationWillResignActive(.screenshot)
-        }
-    }
-    
-    public func applicationDidBecomeActive(_ application: UIApplication) {
-        // Protect Data Leakage - OFF && Prevent Screenshot - ON
-        DispatchQueue.main.async {
-            self.screenProtectorKitManager?.applicationDidBecomeActive(.dataLeakage)
-            self.initializeManagerIfNeeded(forceRecreate: true)
-            self.screenProtectorKitManager?.applicationDidBecomeActive(.screenshot)
+            self.willResignActive(.dataLeakage)
+            self.willResignActive(.screenshot)
         }
     }
     
@@ -90,68 +146,96 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
             self.initializeManagerIfNeeded()
             switch call.method {
             case "protectDataLeakageWithBlur":
-                self.screenProtectorKitManager?.enableProtectionMode(.blur)
+                self.blurProtectionState = .on
                 result(true)
                 break
             case "protectDataLeakageWithBlurOff":
-                self.screenProtectorKitManager?.disableProtectionMode(.blur)
+                self.blurProtectionState = .off
+                self.screenProtectorKit?.disableBlurScreen()
                 result(true)
                 break
             case "protectDataLeakageWithImage":
-                self.screenProtectorKitManager?.enableProtectionMode(.image(name: args?["name"] ?? "LaunchImage"))
+                if args != nil {
+                    self.imageProtectionName = args!["name"] ?? "LaunchImage"
+                }
+                self.imageProtectionState = .on
                 result(true)
                 break
             case "protectDataLeakageWithImageOff":
-                self.screenProtectorKitManager?.disableProtectionMode(.image(name: ""))
+                self.imageProtectionName = ""
+                self.imageProtectionState = .off
                 result(true)
                 break
             case "protectDataLeakageWithColor":
-                guard let hexColor = args!["hexColor"] else {
+                guard let args = args, let hexColor = args["hexColor"] else {
                     result(false)
                     return
                 }
-                result(self.screenProtectorKitManager?.enableProtectionMode(.color(hex: hexColor)) ?? false)
+                self.colorProtectionHex = hexColor
+                self.colorProtectionState = .on
                 break
             case "protectDataLeakageWithColorOff":
-                _ = self.screenProtectorKitManager?.disableProtectionMode(.color(hex: ""))
+                self.colorProtectionHex = ""
+                self.colorProtectionState = .off
+                self.screenProtectorKit?.disableColorScreen()
                 result(true)
                 break
             case "protectDataLeakageOff":
-                _ = self.screenProtectorKitManager?.disableAllProtection()
+                self.colorProtectionState = .off
+                self.imageProtectionState = .off
+                self.blurProtectionState = .off
+                self.screenProtectorKit?.disableColorScreen()
+                self.screenProtectorKit?.disableImageScreen()
+                self.screenProtectorKit?.disableBlurScreen()
                 result(true)
                 break
             case "preventScreenshotOn":
-                _ = self.screenProtectorKitManager?.enableScreenshotPrevention()
+                self.preventScreenshotState = .on
+                self.screenProtectorKit?.enabledPreventScreenshot()
                 result(true)
                 break
             case "preventScreenshotOff":
-                _ = self.screenProtectorKitManager?.disableScreenshotPrevention()
+                self.preventScreenshotState = .off
+                self.screenProtectorKit?.disablePreventScreenshot()
                 result(true)
                 break
             case "addListener":
-                self.screenProtectorKitManager?.setListener(for: .screenshot) { _ in
-                    SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenshot", arguments: nil)
-                }
-                
-                self.screenProtectorKitManager?.setListener(for: .screenRecording) { payload in
-                    if case let .screenRecording(isCaptured) = payload {
-                        SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenRecord", arguments: isCaptured)
-                    }
-                }
-                
+                self.addListener()
                 result("listened")
                 break
             case "removeListener":
-                self.screenProtectorKitManager?.removeListeners()
+                self.needAddListener = false
+                self.screenProtectorKit?.removeAllObserver()
                 result("removed")
                 break
             case "isRecording":
-                result(self.screenProtectorKitManager?.isScreenRecording() ?? false)
+                result(self.screenProtectorKit?.screenIsRecording() ?? false)
                 break
             default:
                 result(false)
                 break
             }
+        }
+    }
+    
+    private func addListener() {
+        self.needAddListener = true
+        self.screenProtectorKit?.removeScreenshotObserver()
+        self.screenProtectorKit?.screenshotObserver {
+            SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenshot", arguments: nil)
+        }
+        
+        if #available(iOS 11.0, *) {
+            self.screenProtectorKit?.removeScreenRecordObserver()
+            self.screenProtectorKit?.screenRecordObserver { isRecording in
+                SwiftScreenProtectorPlugin.channel?.invokeMethod("onScreenRecord", arguments: isRecording)
+            }
+        }
+    }
+    
+    private func addListenerIfNeeded() {
+        if self.needAddListener {
+            self.addListener()
         }
     }
     
@@ -166,7 +250,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
             self?.tearDownManager()
         }
         
-        let foregroundObserver = center.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+        let foregroundObserver = center.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] _ in
             self?.initializeManagerIfNeeded(forceRecreate: true)
         }
         
@@ -174,10 +258,8 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     }
     
     private func tearDownManager() {
-        // Preserve current protection state, remove listeners, and release manager/window references
-        trackedStateSnapshot = screenProtectorKitManager?.getStateSnapshot()
-        screenProtectorKitManager?.removeListeners()
-        screenProtectorKitManager = nil
+        onMain { self.screenProtectorKit?.removeAllObserver() }
+        screenProtectorKit = nil
         trackedWindow = nil
     }
     
@@ -191,6 +273,21 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         } else {
             return UIApplication.shared.windows.first { $0.isKeyWindow }
         }
+    }
+    
+    private func log() {
+        #if DEBUG
+        print("[screen_protector] screenProtectorKit: \(String(describing: screenProtectorKit))")
+        print("[screen_protector] trackedWindow: \(String(describing: trackedWindow))")
+        print("[screen_protector] sceneObservers: \(sceneObservers)")
+        print("[screen_protector] preventScreenshotState: \(preventScreenshotState)")
+        print("[screen_protector] blurProtectionState: \(blurProtectionState)")
+        print("[screen_protector] imageProtectionState: \(imageProtectionState)")
+        print("[screen_protector] colorProtectionState: \(colorProtectionState)")
+        print("[screen_protector] imageProtectionName: \(imageProtectionName)")
+        print("[screen_protector] colorProtectionHex: \(colorProtectionHex)")
+        print("[screen_protector] needAddListener: \(needAddListener)")
+        #endif
     }
     
     deinit {
