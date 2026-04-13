@@ -34,9 +34,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  image_cropper: 64567491beea6cd1bc4b11948e2babb590de5826
-  image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
-  screen_protector: 18c6aca2dc5d2a832f6787a5318f97f03e9d3150
+  image_cropper: b8ef14d3fcff4040b0f9da2ca28d98219a5cba0e
+  image_picker_ios: 4f2f91b01abdb52842a8e277617df877e40f905b
+  screen_protector: 585e4a9744efa35ec4ba9a6877b22e46b8d48987
   ScreenProtectorKit: 6ceb3e0808341a9bc15d175bff40dfdd4b32da71
   TOCropViewController: 797deaf39c90e6e9ddd848d88817f6b9a8a09888
 
