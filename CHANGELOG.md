@@ -1,3 +1,8 @@
+## 1.5.2
+
+- iOS: add Swift Package Manager support
+- Android: AGP 9 compatibility — apply `kotlin-android` only on AGP < 9 (AGP 9+ has built-in Kotlin), switch to new DSL (`minSdk`/`targetSdk`), drop unused `kotlinOptions` block
+
 ## 1.5.1
 
 - Refactor: replace hack-based screenshot prevention with overlay implementation
