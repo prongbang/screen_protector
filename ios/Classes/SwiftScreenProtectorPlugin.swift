@@ -19,7 +19,7 @@ enum ScrennProtectorMethod: String {
     case isRecording
 }
 
-public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
+public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin, FlutterSceneLifeCycleDelegate {
     private static var channel: FlutterMethodChannel? = nil
     private let protectKit: ScreenProtectorKit
     private var protectMode: ScreenProtectorMode = .none
@@ -39,6 +39,7 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
         
         registrar.addMethodCallDelegate(instance, channel: SwiftScreenProtectorPlugin.channel!)
         registrar.addApplicationDelegate(instance)
+        registrar.addSceneDelegate(instance)
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -58,6 +59,16 @@ public class SwiftScreenProtectorPlugin: NSObject, FlutterPlugin {
     }
 
     public func applicationDidBecomeActive(_ application: UIApplication) {
+        updateWindowIfNeeded()
+        clearDataLeakageProtection()
+    }
+
+    public func sceneWillResignActive(_ scene: UIScene) {
+        updateWindowIfNeeded()
+        applyDataLeakageProtection()
+    }
+
+    public func sceneDidBecomeActive(_ scene: UIScene) {
         updateWindowIfNeeded()
         clearDataLeakageProtection()
     }
@@ -205,7 +216,12 @@ private extension SwiftScreenProtectorPlugin {
     }
 
     static func keyWindow() -> UIWindow? {
-        if #available(iOS 13.0, *) {
+        if #available(iOS 15.0, *) {
+            return UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .compactMap { $0.keyWindow }
+                .first
+        } else if #available(iOS 13.0, *) {
             return UIApplication.shared.connectedScenes
                 .compactMap { $0 as? UIWindowScene }
                 .flatMap { $0.windows }

@@ -23,8 +23,14 @@ final class FlutterRootViewResolver: ScreenProtectorRootViewResolving {
             return nil
         }
         
-        guard let flutterVC = windowScene.windows
-            .first(where: { $0.isKeyWindow })?
+        let keyWindow: UIWindow?
+        if #available(iOS 15.0, *) {
+            keyWindow = windowScene.keyWindow
+        } else {
+            keyWindow = windowScene.windows.first(where: { $0.isKeyWindow })
+        }
+
+        guard let flutterVC = keyWindow?
             .rootViewController as? FlutterViewController else {
             log("resolveFlutterRootView: FlutterViewController not found on key window")
             return nil
