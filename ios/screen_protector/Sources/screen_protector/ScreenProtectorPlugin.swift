@@ -122,6 +122,7 @@ private extension ScreenProtectorPlugin {
             isPreventScreenshotEnabled = true
             updateWindowIfNeeded()
             protectKit.enabledPreventScreenshot()
+            configureScreenshotProtectorAccessibility()
             result(true)
             break
         case .preventScreenshotOff:
@@ -133,6 +134,7 @@ private extension ScreenProtectorPlugin {
         case .preventScreenRecordOn:
             updateWindowIfNeeded()
             protectKit.enabledPreventScreenRecording()
+            configureScreenshotProtectorAccessibility()
             result(true)
             break
         case .preventScreenRecordOff:
@@ -174,6 +176,69 @@ private extension ScreenProtectorPlugin {
         }
     }
 
+    func configureScreenshotProtectorAccessibility() {
+        let configure = { [weak self] in
+            guard let self = self else { return }
+            for window in Self.accessibilityWindows() {
+                self.configureScreenshotProtectorAccessibility(in: window)
+            }
+
+            if UIAccessibility.isVoiceOverRunning {
+                UIAccessibility.post(notification: .layoutChanged, argument: nil)
+            }
+        }
+
+        configure()
+        DispatchQueue.main.async(execute: configure)
+    }
+
+    func configureScreenshotProtectorAccessibility(in view: UIView) {
+        if isScreenshotProtectorView(view) {
+            view.isAccessibilityElement = false
+            view.accessibilityElementsHidden = false
+            view.shouldGroupAccessibilityChildren = false
+            view.accessibilityViewIsModal = false
+        }
+
+        for child in view.subviews {
+            configureScreenshotProtectorAccessibility(in: child)
+        }
+    }
+
+    func isScreenshotProtectorView(_ view: UIView) -> Bool {
+        let className = String(reflecting: type(of: view))
+        if className.contains("ScreenPreventerKit") ||
+            className.contains("ScreenProtectorKit") ||
+            className.contains("ScreenshotProtection") {
+            return true
+        }
+
+        guard let textField = view as? UITextField,
+              textField.isSecureTextEntry,
+              textField.text?.isEmpty ?? true,
+              textField.placeholder == nil else {
+            return false
+        }
+
+        return textField.superview is UIWindow ||
+            (!textField.isUserInteractionEnabled &&
+                hasScreenshotProtectorAncestor(textField))
+    }
+
+    func hasScreenshotProtectorAncestor(_ view: UIView) -> Bool {
+        var ancestor = view.superview
+        while let current = ancestor {
+            let className = String(reflecting: type(of: current))
+            if className.contains("ScreenPreventerKit") ||
+                className.contains("ScreenProtectorKit") ||
+                className.contains("ScreenshotProtection") {
+                return true
+            }
+            ancestor = current.superview
+        }
+        return false
+    }
+
     func applyDataLeakageProtection() {
         updateWindowIfNeeded()
         clearDataLeakageProtection()
@@ -212,5 +277,14 @@ private extension ScreenProtectorPlugin {
                 .first { $0.isKeyWindow }
         }
         return UIApplication.shared.keyWindow
+    }
+
+    static func accessibilityWindows() -> [UIWindow] {
+        if #available(iOS 13.0, *) {
+            return UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+        }
+        return UIApplication.shared.windows
     }
 }
