@@ -1,22 +1,13 @@
-plugins {
-    id 'com.android.library'
-}
+group 'com.prongbang.screen_protector'
 
-// AGP 9+ has built-in Kotlin support; older versions need the plugin explicitly
-def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.split('\\.')[0].toInteger()
-if (agpMajor < 9) {
-    apply plugin: 'kotlin-android'
-}
-
-rootProject.allprojects {
+buildscript {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
 }
 
-group 'com.prongbang.screen_protector'
+apply plugin: 'com.android.library'
 
 android {
     namespace 'com.prongbang.screen_protector'
