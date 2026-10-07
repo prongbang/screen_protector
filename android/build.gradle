@@ -2,9 +2,12 @@ plugins {
     id 'com.android.library'
 }
 
-// AGP 9+ has built-in Kotlin support; older versions need the plugin explicitly
-def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.split('\\.')[0].toInteger()
-if (agpMajor < 9) {
+// AGP 9+ can provide built-in Kotlin support, but only when the consuming app has
+// opted in via android.builtInKotlin=true. Checking the AGP version alone is not
+// enough: on AGP 9+ with built-in Kotlin still disabled, Kotlin sources would
+// silently go uncompiled. Fall back to applying the plugin explicitly in that case.
+def builtInKotlinEnabled = findProperty('android.builtInKotlin')?.toString()?.toBoolean() ?: false
+if (!builtInKotlinEnabled) {
     apply plugin: 'kotlin-android'
 }
 
@@ -29,6 +32,10 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
     }
 
     defaultConfig {
