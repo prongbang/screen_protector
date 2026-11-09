@@ -1,3 +1,8 @@
+## 1.5.4
+
+- iOS: declare the `FlutterFramework` Swift package dependency, which future Flutter versions require
+- Raise the minimum Flutter version to 3.41, which provides that package
+
 ## 1.5.3
 
 - Fix: Lower iOS deployment target to v13

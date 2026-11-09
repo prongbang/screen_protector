@@ -11,12 +11,14 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/prongbang/ScreenProtectorKit.git", exact: "1.5.1"),
+        .package(name: "FlutterFramework", path: "../FlutterFramework"),
     ],
     targets: [
         .target(
             name: "screen_protector",
             dependencies: [
-                .product(name: "ScreenProtectorKit", package: "ScreenProtectorKit")
+                .product(name: "ScreenProtectorKit", package: "ScreenProtectorKit"),
+                .product(name: "FlutterFramework", package: "FlutterFramework")
             ]
         )
     ]
